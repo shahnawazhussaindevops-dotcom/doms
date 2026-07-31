@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en" style="color-scheme: dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="description" content="DOMS — Precision in Every Line. Premium writing instruments since 1978.">
+<title>DOMS — Precision in Every Line</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:oklch(.14 .008 70);
+  --bg-alt:oklch(.16 .009 70);
+  --surface:oklch(.19 .01 70);
+  --surface-2:oklch(.215 .011 70);
+  --line:oklch(.3 .012 70);
+  --fg:oklch(.93 .012 85);
+  --muted:oklch(.72 .02 85);
+  --dim:oklch(.56 .02 80);
+  --gold:oklch(.78 .125 85);
+  --gold-ink:oklch(.62 .11 85);
+  --gold-glow:oklch(.78 .125 85 / .14);
+  --ff-display:'Fraunces',serif;
+  --ff-body:'Inter',sans-serif;
+  --col:clamp(24px,6vw,96px);
+  --col-max:min(520px,40vw);
+  --z-video:0;--z-overlay:1;--z-phase:2;--z-nav:3;--z-chrome:4;
+  --ease-expo:cubic-bezier(.16,1,.3,1);
+}
+html{overflow-x:hidden}
+body{background:var(--bg);color:var(--fg);font-family:var(--ff-body);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+
+#video-bg{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:var(--z-video);pointer-events:none;background:#0a0a0a url(poster.jpg) center/cover no-repeat}
+#scrub-video{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .6s}
+#scrub-video.ready{opacity:1}
+.vignette{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 45%,rgba(7,7,7,.6) 100%);z-index:var(--z-overlay);pointer-events:none}
+.scrim{position:absolute;inset:0;z-index:var(--z-overlay);pointer-events:none;background:linear-gradient(90deg,rgba(5,5,5,.94) 0%,rgba(5,5,5,.8) 20%,rgba(5,5,5,.55) 32%,rgba(5,5,5,.26) 44%,rgba(5,5,5,0) 56%)}
+.grain{position:absolute;inset:0;opacity:.035;z-index:var(--z-overlay);mix-blend-mode:overlay;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");background-repeat:repeat;background-size:128px 128px}
+body.no-video #scrub-video{display:none}
+
+#scroll-trigger{position:relative;height:600vh;z-index:var(--z-overlay);pointer-events:none}
+
+.phase{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:var(--z-phase);display:flex;align-items:center;justify-content:flex-start;pointer-events:none;will-change:opacity;opacity:0}
+.phase-inner{text-align:left;padding:0 var(--col);max-width:var(--col-max);width:100%}
+
+.hairline{height:1px;width:56px;background:var(--gold);margin:0 0 26px;border:0}
+
+.hero-brand{font-size:.72rem;text-transform:uppercase;letter-spacing:.32em;color:var(--gold);font-weight:500;margin-bottom:18px}
+.hero-headline{font-family:var(--ff-display);font-size:clamp(3.2rem,7.5vw,5.6rem);font-weight:700;color:var(--fg);line-height:.98;letter-spacing:-.02em;margin-bottom:18px;text-wrap:balance}
+.hero-headline i{color:var(--gold);font-style:italic;font-weight:600}
+.hero-sub{font-size:clamp(1rem,1.25vw,1.18rem);color:var(--muted);max-width:40ch;margin:0 0 34px;line-height:1.6;font-weight:300}
+.btn-hero{display:inline-flex;align-items:center;gap:10px;font-family:var(--ff-body);font-size:.95rem;font-weight:500;color:#0a0a0a;background:var(--gold);padding:15px 38px;border-radius:100px;border:none;cursor:pointer;transition:transform .25s var(--ease-expo),box-shadow .25s;min-height:50px;pointer-events:auto}
+.btn-hero:hover{transform:translateY(-2px);box-shadow:0 0 44px var(--gold-glow),0 8px 24px rgba(0,0,0,.4)}
+
+.craft-year{font-family:var(--ff-display);font-size:clamp(4.5rem,12vw,8rem);font-weight:700;line-height:.85;color:var(--gold);opacity:.55;margin-bottom:6px;letter-spacing:-.02em}
+.craft-label{font-family:var(--ff-display);font-size:clamp(1.2rem,2vw,1.6rem);font-weight:500;font-style:italic;color:var(--fg);margin-bottom:22px}
+.craft-text{font-size:clamp(1rem,1.2vw,1.12rem);color:var(--muted);max-width:46ch;line-height:1.7}
+.craft-text em{color:var(--fg);font-style:normal;font-weight:500}
+
+.collection-title{font-family:var(--ff-display);font-size:clamp(1.7rem,3vw,2.6rem);font-weight:600;line-height:1.12;letter-spacing:-.01em;color:var(--fg);margin-bottom:12px;text-wrap:balance}
+.collection-sub{font-size:.92rem;color:var(--muted);font-weight:300;margin-bottom:clamp(24px,3.5vw,38px)}
+.products-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-width:640px}
+.product-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:26px 22px;text-align:left;display:flex;flex-direction:column;transition:transform .4s var(--ease-expo),border-color .4s,background .4s;pointer-events:auto}
+.product-card:hover{transform:translateY(-5px);border-color:var(--gold-ink);background:var(--surface-2)}
+.product-glyph{font-family:var(--ff-display);font-size:1.5rem;color:var(--gold);margin-bottom:18px;display:block;letter-spacing:.05em}
+.product-name{font-family:var(--ff-display);font-size:1.2rem;font-weight:600;margin-bottom:8px;color:var(--fg)}
+.product-desc{font-size:.85rem;color:var(--muted);line-height:1.6;margin-bottom:18px;flex:1}
+.product-spec{display:flex;align-items:center;gap:8px;padding-top:14px;border-top:1px solid var(--line);font-size:.7rem;color:var(--dim);letter-spacing:.14em;text-transform:uppercase}
+.product-spec::before{content:"";width:16px;height:1px;background:var(--gold-ink);flex:none}
+@media(max-width:640px){.products-grid{grid-template-columns:1fr;max-width:420px}}
+
+.precision-statement{font-family:var(--ff-display);font-size:clamp(1.7rem,3vw,2.5rem);font-weight:600;line-height:1.18;letter-spacing:-.01em;color:var(--fg);text-wrap:balance}
+.precision-statement i{color:var(--gold);font-style:italic}
+.precision-sub{margin:16px 0 34px;color:var(--muted);font-size:.94rem;line-height:1.7;max-width:44ch;font-weight:300}
+.precision-facts{border-top:1px solid var(--line)}
+.fact{display:flex;align-items:baseline;justify-content:space-between;gap:24px;padding:18px 2px;border-bottom:1px solid var(--line)}
+.fact-num{font-family:var(--ff-display);font-size:clamp(1.5rem,2.4vw,2rem);font-weight:700;color:var(--gold);line-height:1;white-space:nowrap}
+.fact-num small{font-size:.55em;font-weight:500;color:var(--gold);margin-left:2px}
+.fact-label{font-size:.78rem;color:var(--muted);text-align:right;letter-spacing:.02em;line-height:1.5;max-width:22ch}
+
+.legacy-quote{font-family:var(--ff-display);font-size:clamp(1.7rem,3.4vw,2.8rem);font-weight:500;line-height:1.22;color:var(--fg);max-width:26ch;margin:0 0 40px;letter-spacing:-.01em;text-wrap:balance}
+.legacy-quote i{color:var(--gold);font-style:italic}
+.legacy-strip{display:flex;flex-wrap:wrap;gap:0;align-items:flex-start}
+.legacy-stat{padding:0 32px 0 0;text-align:left;position:relative}
+.legacy-stat+.legacy-stat{margin-left:32px;padding-left:32px}
+.legacy-stat+.legacy-stat::before{content:"";position:absolute;left:0;top:50%;transform:translateY(-50%);width:1px;height:44px;background:var(--line)}
+.legacy-num{font-family:var(--ff-display);font-size:clamp(1.9rem,3.4vw,3.2rem);font-weight:700;color:var(--gold);line-height:1}
+.legacy-stat-label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.14em;margin-top:8px}
+@media(max-width:640px){.legacy-strip{flex-direction:column;gap:26px}.legacy-stat+.legacy-stat{margin-left:0;padding-left:0}.legacy-stat+.legacy-stat::before{display:none}}
+
+.cta-title{font-family:var(--ff-display);font-size:clamp(1.9rem,4vw,3.2rem);font-weight:600;line-height:1.06;color:var(--fg);margin-bottom:14px;letter-spacing:-.02em;text-wrap:balance}
+.cta-title i{color:var(--gold);font-style:italic}
+.cta-sub{font-size:.96rem;color:var(--muted);margin:0 0 30px;max-width:38ch;line-height:1.6;font-weight:300}
+.cta-group{display:flex;gap:14px;flex-wrap:wrap}
+.btn-primary{display:inline-flex;align-items:center;gap:10px;font-family:var(--ff-body);font-size:.95rem;font-weight:500;color:#0a0a0a;background:var(--gold);padding:15px 38px;border-radius:100px;border:none;cursor:pointer;transition:transform .25s var(--ease-expo),box-shadow .25s;min-height:50px;pointer-events:auto}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 44px var(--gold-glow),0 8px 24px rgba(0,0,0,.4)}
+.btn-second{display:inline-flex;align-items:center;gap:8px;font-family:var(--ff-body);font-size:.9rem;color:var(--muted);padding:15px 30px;border-radius:100px;border:1px solid var(--line);background:transparent;cursor:pointer;transition:border-color .3s,color .3s;min-height:50px;pointer-events:auto}
+.btn-second:hover{border-color:var(--gold-ink);color:var(--gold)}
+
+.nav{position:fixed;top:0;left:0;right:0;z-index:var(--z-nav);padding:20px var(--col);display:flex;align-items:center;justify-content:space-between;transition:background .4s,backdrop-filter .4s,border-color .4s;border-bottom:1px solid transparent}
+.nav.scrolled{background:rgba(10,10,10,.72);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom-color:var(--line)}
+.nav-logo{font-family:var(--ff-display);font-size:1.5rem;font-weight:700;color:var(--fg);letter-spacing:.01em}
+.nav-logo i{color:var(--gold);font-style:italic}
+.nav-est{font-size:.68rem;color:var(--dim);text-transform:uppercase;letter-spacing:.28em}
+
+#progress-bar{position:fixed;bottom:0;left:0;right:0;height:2px;z-index:var(--z-chrome);pointer-events:none;background:rgba(255,255,255,.05)}
+#progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--gold-ink),var(--gold))}
+#chapter{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:var(--z-chrome);font-size:.66rem;text-transform:uppercase;letter-spacing:.26em;color:var(--dim);transition:opacity .5s;pointer-events:none;white-space:nowrap}
+#chapter .dot{color:var(--gold);display:inline-block;margin-right:10px;transition:transform .3s}
+
+@media(max-width:768px){
+  .scrim{background:linear-gradient(100deg,rgba(5,5,5,.95) 0%,rgba(5,5,5,.78) 50%,rgba(5,5,5,.5) 78%,rgba(5,5,5,.34) 100%)}
+  .nav{padding:16px 22px}
+  .phase-inner{padding:0 24px;max-width:100%}
+}
+@media(max-width:640px){
+  .phase-inner{padding:32px 24px;max-height:100vh;overflow-y:auto}
+  .craft-year{font-size:clamp(4rem,18vw,5.5rem)}
+  .product-card{padding:20px 18px}
+  .fact{padding:14px 2px}
+  .legacy-quote{font-size:clamp(1.5rem,7vw,1.9rem)}
+  .cta-title{font-size:clamp(1.7rem,8vw,2.2rem)}
+}
+
+@media(prefers-reduced-motion:reduce){
+  #scroll-trigger{height:auto}
+  #video-bg{position:relative;height:100vh}
+  .phase{position:relative;opacity:1!important;transform:none!important;height:100vh;pointer-events:auto}
+  #scrub-video{opacity:1}
+  #progress-bar,#chapter{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <a href="#" class="nav-logo">DOM<i>S</i></a>
+  <span class="nav-est">Est. 1978</span>
+</nav>
+
+<div id="video-bg">
+  <video id="scrub-video" src="scrub.mp4" poster="poster.jpg" preload="auto" muted playsinline disablepictureinpicture disableremoteplayback aria-hidden="true"></video>
+  <div class="vignette" aria-hidden="true"></div>
+  <div class="scrim" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+</div>
+
+<div id="scroll-trigger"></div>
+
+<div class="phase" id="phase-hero">
+  <div class="phase-inner">
+    <p class="hero-brand">Since 1978</p>
+    <h1 class="hero-headline">DOM<i>S</i></h1>
+    <p class="hero-sub">Instruments that turn thought into form.</p>
+    <button class="btn-hero">Explore the collection &rarr;</button>
+  </div>
+</div>
+
+<div class="phase" id="phase-craft">
+  <div class="phase-inner">
+    <hr class="hairline">
+    <div class="craft-year">1978</div>
+    <p class="craft-label">Four decades of refinement</p>
+    <p class="craft-text">Every pencil, every pen — a study in <em>balance</em>, <em>weight</em>, and <em>purpose</em>. Crafted for the hand that moves with intention.</p>
+  </div>
+</div>
+
+<div class="phase" id="phase-products">
+  <div class="phase-inner">
+    <h2 class="collection-title">Three instruments, one philosophy</h2>
+    <p class="collection-sub">Each made for a particular kind of thinking.</p>
+    <div class="products-grid">
+      <div class="product-card">
+        <span class="product-glyph">&#9998;</span>
+        <div class="product-name">Graphite Master</div>
+        <div class="product-desc">Premium graphite pencil. Hexagonal cedar barrel, precision-graded HB through 6B.</div>
+        <div class="product-spec">HB &middot; 2B &middot; 4B &middot; 6B</div>
+      </div>
+      <div class="product-card">
+        <span class="product-glyph">&#9997;</span>
+        <div class="product-name">Ink Vessel</div>
+        <div class="product-desc">Precision fountain pen. Iridium-tipped nib, balanced resin barrel, flow-optimised feed.</div>
+        <div class="product-spec">Fine &middot; Medium nib</div>
+      </div>
+      <div class="product-card">
+        <span class="product-glyph">&#9000;</span>
+        <div class="product-name">Draft Pro</div>
+        <div class="product-desc">Mechanical precision. 0.5mm lead sleeve, knurled metal grip, retractable tip.</div>
+        <div class="product-spec">0.5mm &middot; Metal barrel</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="phase" id="phase-details">
+  <div class="phase-inner">
+    <hr class="hairline">
+    <p class="precision-statement">Tolerance is not a number.<br>It is a <i>discipline</i>.</p>
+    <p class="precision-sub">Measured in microns, held to a standard, guarded across forty-seven years of production.</p>
+    <div class="precision-facts">
+      <div class="fact">
+        <div class="fact-num"><span data-target="0.3" data-fmt="one">0.0</span><small>mm</small></div>
+        <div class="fact-label">Lead tolerance, run to run</div>
+      </div>
+      <div class="fact">
+        <div class="fact-num"><span data-target="12" data-fmt="int">0</span></div>
+        <div class="fact-label">Hardness grades in production</div>
+      </div>
+      <div class="fact">
+        <div class="fact-num"><span data-target="150" data-fmt="int">0</span><small>m</small></div>
+        <div class="fact-label">Ink per cartridge, measured</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="phase" id="phase-legacy">
+  <div class="phase-inner">
+    <hr class="hairline">
+    <p class="legacy-quote">Every masterpiece begins with <i>a single line</i>.</p>
+    <div class="legacy-strip">
+      <div class="legacy-stat">
+        <div class="legacy-num"><span data-target="2.5" data-fmt="one">0</span></div>
+        <div class="legacy-stat-label">Billion pencils made</div>
+      </div>
+      <div class="legacy-stat">
+        <div class="legacy-num"><span data-target="40" data-fmt="int">0</span></div>
+        <div class="legacy-stat-label">Countries reached</div>
+      </div>
+      <div class="legacy-stat">
+        <div class="legacy-num"><span data-target="1978" data-fmt="int">0</span></div>
+        <div class="legacy-stat-label">Founded</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="phase" id="phase-cta">
+  <div class="phase-inner">
+    <hr class="hairline">
+    <h2 class="cta-title">Find <i>your</i> instrument</h2>
+    <p class="cta-sub">The right tool is not a luxury. It is the difference between good and unforgettable.</p>
+    <div class="cta-group">
+      <button class="btn-primary">Explore the collection <span>&rarr;</span></button>
+      <button class="btn-second">Our story</button>
+    </div>
+  </div>
+</div>
+
+<div id="progress-bar"><div id="progress-fill"></div></div>
+<div id="chapter"><span class="dot">&bull;</span><span id="chapter-label">Scroll</span></div>
+
+<script>
+(function(){
+'use strict';
+
+var video = document.getElementById('scrub-video');
+var trigger = document.getElementById('scroll-trigger');
+var nav = document.getElementById('nav');
+var progressFill = document.getElementById('progress-fill');
+var chapter = document.getElementById('chapter-label');
+
+var phases = [
+  { el: document.getElementById('phase-hero'),    start:0.00, end:0.09, fadeIn:0.00, fadeOut:0.04, label:'DOMS' },
+  { el: document.getElementById('phase-craft'),   start:0.17, end:0.29, fadeIn:0.04, fadeOut:0.04, label:'Heritage' },
+  { el: document.getElementById('phase-products'),start:0.37, end:0.49, fadeIn:0.04, fadeOut:0.04, label:'Collection' },
+  { el: document.getElementById('phase-details'), start:0.57, end:0.69, fadeIn:0.04, fadeOut:0.04, label:'Precision' },
+  { el: document.getElementById('phase-legacy'),  start:0.77, end:0.87, fadeIn:0.04, fadeOut:0.04, label:'Trust' },
+  { el: document.getElementById('phase-cta'),     start:0.95, end:1.00, fadeIn:0.04, fadeOut:0.03, label:'Begin' }
+];
+
+var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+var rafId = null;
+var currentTime = 0;
+var targetTime = 0;
+var isReady = false;
+var booted = false;
+
+function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
+
+function getOpacity(progress, start, end, fadeIn, fadeOut){
+  if (progress < start - fadeIn) return 0;
+  if (progress < start) return fadeIn > 0 ? easeOutCubic((progress - (start - fadeIn)) / fadeIn) : 1;
+  if (progress < end) return 1;
+  if (progress < end + fadeOut) return 1 - easeOutCubic((progress - end) / fadeOut);
+  return 0;
+}
+
+function updateScene(progress){
+  var activeIdx = -1;
+  phases.forEach(function(p, i){
+    var op = getOpacity(progress, p.start, p.end, p.fadeIn, p.fadeOut);
+    p.el.style.opacity = op;
+    p.el.style.pointerEvents = op > 0.5 ? 'auto' : 'none';
+    if (op > 0.5) activeIdx = i;
+  });
+  if (activeIdx >= 0) {
+    chapter.textContent = phases[activeIdx].label;
+    chapter.parentNode.style.opacity = 1;
+  } else {
+    chapter.textContent = 'Scroll';
+    chapter.parentNode.style.opacity = 0;
+  }
+  nav.classList.toggle('scrolled', progress > 0.03);
+}
+
+function getProgress(){
+  var maxScroll = trigger.scrollHeight - window.innerHeight;
+  return maxScroll > 0 ? Math.max(0, Math.min(1, window.scrollY / maxScroll)) : 0;
+}
+
+function onScroll(){
+  var progress = getProgress();
+  if (isReady && video.duration && video.readyState >= 1) {
+    targetTime = progress * video.duration;
+  }
+  updateScene(progress);
+  progressFill.style.width = (progress * 100) + '%';
+}
+
+function tick(){
+  if (isReady && video.readyState >= 1 && video.duration) {
+    currentTime += (targetTime - currentTime) * 0.16;
+    var ct = video.currentTime || 0;
+    if (Math.abs(currentTime - ct) > 0.008) {
+      try { video.currentTime = currentTime; } catch(e) {}
+    }
+  }
+  rafId = requestAnimationFrame(tick);
+}
+
+function startLoop(){
+  if (rafId === null) rafId = requestAnimationFrame(tick);
+}
+
+function boot(){
+  if (booted) return;
+  booted = true;
+  isReady = true;
+  currentTime = targetTime;
+  try { video.currentTime = currentTime; } catch(e) {}
+  video.classList.add('ready');
+  startLoop();
+  onScroll();
+}
+
+function initScrub(){
+  video.load();
+  var onReady = boot;
+  if (video.readyState >= 2) onReady();
+  else {
+    video.addEventListener('loadeddata', onReady);
+    video.addEventListener('canplay', onReady);
+    video.addEventListener('loadedmetadata', onReady);
+  }
+  video.addEventListener('error', function(){
+    document.body.classList.add('no-video');
+    isReady = true;
+    booted = true;
+    onScroll();
+  });
+  setTimeout(function(){ if (!booted) boot(); }, 3000);
+}
+
+if (reduced.matches) {
+  video.play().catch(function(){});
+  phases.forEach(function(p){ p.el.style.opacity = 1; p.el.style.position = 'relative'; });
+  document.getElementById('scroll-trigger').style.height = 'auto';
+  video.classList.add('ready');
+} else {
+  initScrub();
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  document.addEventListener('visibilitychange', function(){
+    if (document.hidden) { if (rafId !== null) { cancelAnimationFrame(rafId); rafId = null; } }
+    else if (isReady) startLoop();
+  });
+}
+
+var countersDone = false;
+function runCounters(){
+  if (countersDone) return;
+  countersDone = true;
+  document.querySelectorAll('[data-target]').forEach(function(el){
+    var t = parseFloat(el.dataset.target);
+    var fmt = el.dataset.fmt;
+    var start = null;
+    function frame(ts){
+      if (start === null) start = ts;
+      var p = Math.min(1, (ts - start) / 1400);
+      var e = 1 - Math.pow(1 - p, 3);
+      var val = t * e;
+      if (fmt === 'one') el.textContent = val.toFixed(1);
+      else if (fmt === 'int') el.textContent = Math.round(val).toLocaleString('en-US');
+      else el.textContent = Math.round(val);
+      if (p < 1) requestAnimationFrame(frame);
+      else el.textContent = fmt === 'one' ? t.toFixed(1) : Math.round(t).toLocaleString('en-US');
+    }
+    requestAnimationFrame(frame);
+  });
+}
+var counterObs = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){ if (e.isIntersecting) { runCounters(); counterObs.disconnect(); } });
+}, { threshold: 0.1 });
+var detailsEl = document.getElementById('phase-details');
+var legacyEl = document.getElementById('phase-legacy');
+if (detailsEl) counterObs.observe(detailsEl);
+if (legacyEl) counterObs.observe(legacyEl);
+
+if (!('ontouchstart' in window)) {
+  document.querySelectorAll('.btn-hero, .btn-primary, .btn-second').forEach(function(btn){
+    btn.addEventListener('mousemove', function(e){
+      var r = btn.getBoundingClientRect();
+      var x = e.clientX - r.left - r.width/2;
+      var y = e.clientY - r.top - r.height/2;
+      btn.style.transform = 'translate(' + (x*0.12) + 'px,' + (y*0.12) + 'px)';
+    });
+    btn.addEventListener('mouseleave', function(){ btn.style.transform = ''; });
+  });
+}
+
+})();
+</script>
+</body>
+</html>
